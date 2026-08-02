@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="目的と文脈から技術文書のファイル名を決める命名規則。">
+  <title>文書ファイル命名規則</title>
+  <link rel="stylesheet" href="reference.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へ移動</a>
+  <aside class="rail" aria-label="文書内索引"><strong>命名規則</strong><nav aria-label="章一覧"><ul><li><a href="#principle">原則</a></li><li><a href="#algorithm">決定手順</a></li><li><a href="#patterns">形式</a></li><li><a href="#preserve">改訂</a></li></ul></nav></aside>
+  <main class="page" id="main">
+    <header class="hero"><p class="eyebrow">Naming / Repository Convention</p><h1>文書ファイル命名規則</h1><p class="lede">固定名の強制ではなく、目的、スコープ、既存規約から予測可能な名前を決める。</p><dl class="meta"><div><dt>既定形式</dt><dd>UPPER-KEBAB-CASE.html</dd></div><div><dt>版管理</dt><dd>原則Git</dd></div><div><dt>優先</dt><dd>外部標準名</dd></div></dl></header>
+    <section class="section" id="principle">
+      <h2>原則</h2>
+      <p><code>HLD.html</code> や <code>REQUIREMENTS.html</code> は普遍的な機械認識標準ではない。大文字化は、標準的なルート文書との視覚的一貫性、一覧性、CLI互換性を得るためのプロジェクト規約である。</p>
+      <ul><li>目的を表す種別を先頭に置く。</li><li>同種が一つなら主題を重ねない。</li><li>同種が複数ある場合だけ主題を付ける。</li><li>日付と連番は識別子として必要な文書だけに使う。</li><li>利用者が指定した安全なファイル名は尊重する。</li></ul>
+    </section>
+    <section class="section" id="algorithm">
+      <h2>決定手順</h2>
+      <ol><li>プラットフォーム、ツール、既存プロジェクトが要求する標準名を確認する。</li><li>文書の目的に対応する一般的な種別を選ぶ。</li><li>配置ディレクトリ内で同種文書が複数あるか確認する。</li><li>主題、連番、日付が識別に必要か確認する。</li><li>既存リンク、履歴、大小文字の互換性を確認する。</li></ol>
+    </section>
+    <section class="section" id="patterns">
+      <h2>命名形式</h2>
+      <div class="table-wrap"><table><caption>用途別の推奨形式</caption><thead><tr><th scope="col">条件</th><th scope="col">形式</th><th scope="col">例</th></tr></thead><tbody>
+        <tr><td>外部標準</td><td>指定された正確な名前</td><td><code>README.md</code>、<code>AGENTS.md</code></td></tr>
+        <tr><td>スコープ内に一つ</td><td><code>&lt;TYPE&gt;.html</code></td><td><code>REQUIREMENTS.html</code>、<code>HLD.html</code></td></tr>
+        <tr><td>同種が複数</td><td><code>&lt;TYPE&gt;-&lt;SUBJECT&gt;.html</code></td><td><code>HLD-AUTHENTICATION.html</code></td></tr>
+        <tr><td>意思決定</td><td><code>ADR-&lt;NUMBER&gt;-&lt;SUBJECT&gt;.html</code></td><td><code>ADR-0007-SESSION-EXPIRY.html</code></td></tr>
+        <tr><td>運用手順</td><td><code>RUNBOOK-&lt;SUBJECT&gt;.html</code></td><td><code>RUNBOOK-DATABASE-RESTORE.html</code></td></tr>
+        <tr><td>移行</td><td><code>MIGRATION-&lt;SUBJECT&gt;.html</code></td><td><code>MIGRATION-POSTGRESQL.html</code></td></tr>
+        <tr><td>障害記録</td><td><code>INCIDENT-&lt;DATE&gt;-&lt;SUBJECT&gt;.html</code></td><td><code>INCIDENT-2026-08-02-API-OUTAGE.html</code></td></tr>
+        <tr><td>標準種別なし</td><td><code>&lt;PURPOSE&gt;-&lt;SUBJECT&gt;.html</code></td><td><code>ANALYSIS-CAPACITY.html</code></td></tr>
+      </tbody></table></div>
+      <h3>文字規則</h3>
+      <ul><li>ベース名はASCII大文字、数字、単一ハイフンだけを使う。</li><li>拡張子は小文字の <code>.html</code> とする。</li><li>空白、アンダースコア、日本語、連続ハイフンを使わない。</li><li><code>FINAL</code>、<code>LATEST</code>、<code>NEW</code>、<code>COPY</code> を付けない。</li><li>通常文書へ版番号を付けず、Gitと文書管理欄で版を扱う。</li></ul>
+    </section>
+    <section class="section" id="preserve">
+      <h2>改訂時の保持</h2>
+      <p>内容改訂だけを理由にファイル名を変えない。意味の変更によって改名が必要な場合は、参照リンク、履歴、利用者の作業手順への影響を示し、承認後に移行する。</p>
+      <div class="callout"><p>命名規則へ適合しない既存文書を監査しても、自動改名しない。新規文書へ規則を適用し、既存文書は移行判断を別に扱う。</p></div>
+    </section>
+  </main>
+  <footer class="foot"><p>目的に応じて柔軟に決め、形式は予測可能に揃える。</p></footer>
+</body>
+</html>
+

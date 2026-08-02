@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="理解可能な技術文書の設計規則と研究根拠、適用限界を対応付ける資料。">
+  <title>研究根拠マップ</title>
+  <link rel="stylesheet" href="reference.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へ移動</a>
+  <aside class="rail" aria-label="文書内索引">
+    <strong>研究根拠マップ</strong>
+    <nav aria-label="章一覧"><ul><li><a href="#position">基本姿勢</a></li><li><a href="#map">根拠対応</a></li><li><a href="#limits">適用限界</a></li><li><a href="#sources">一次資料</a></li></ul></nav>
+  </aside>
+  <main class="page" id="main">
+    <header class="hero">
+      <p class="eyebrow">Evidence / Boundary Conditions</p>
+      <h1>研究根拠マップ</h1>
+      <p class="lede">脳科学、認知科学、教育学の知見を、文書設計規則へ過剰に一般化せず対応付ける。</p>
+      <dl class="meta"><div><dt>用途</dt><dd>規範変更時の根拠確認</dd></div><div><dt>証拠</dt><dd>一次研究・標準仕様</dd></div><div><dt>禁止</dt><dd>根拠のない認知スコア</dd></div></dl>
+    </header>
+    <section class="section" id="position">
+      <h2>基本姿勢</h2>
+      <p>実装規則の中心は行動実験と教育心理学の結果である。神経科学の測定結果は作業記憶の制約を裏付けるが、特定の脳領域から配色、箇条書き数、余白値を直接導かない。</p>
+      <div class="callout"><p>研究で観測された平均効果を、全読者へ常に成立する固定ルールとして扱わない。文書種別、読者の熟達度、課題、情報の相互依存性を適用条件に含める。</p></div>
+    </section>
+    <section class="section" id="map">
+      <h2>根拠と実装規則</h2>
+      <div class="table-wrap"><table>
+        <caption>知見、採用規則、導いてはいけない結論</caption>
+        <thead><tr><th scope="col">知見</th><th scope="col">採用する規則</th><th scope="col">導いてはいけない結論</th></tr></thead>
+        <tbody>
+          <tr><td>作業記憶と視覚的短期保持には容量制約と個人差がある。</td><td>同時に比較・判断する情報を意味単位へまとめ、全体像と現在地を示す。</td><td>箇条書きや章を常に3件または4件に固定する。</td></tr>
+          <tr><td>見出し、概観、信号は文章構造の符号化と検索を支える。</td><td>見出しだけで論理を追えるようにし、色・番号・罫線の意味を固定する。</td><td>見出しを増やせば自動的に理解度が上がる。</td></tr>
+          <tr><td>関連する図と説明が離れると統合負荷が増える。</td><td>注釈、結論、図表、参照IDを近接させる。</td><td>すべての文章へ画像を添える。</td></tr>
+          <tr><td>目的と無関係な興味深い情報は主要構造の学習を妨げ得る。</td><td>視覚要素に関係、状態、比較、注意、現在地のいずれかの役割を要求する。</td><td>装飾や余白を全面的に禁止する。</td></tr>
+          <tr><td>支援の効果は読者の熟達度で変化する。</td><td>結論、理由、証拠を同じ正本内で段階的に展開する。</td><td>初心者用と熟達者用の正本を別々に作る。</td></tr>
+          <tr><td>完成例、自己説明、検索練習は学習課題で効果を持つ。</td><td>教育文書に限り、完成例、理由説明、確認課題を選択する。</td><td>要件定義やランブックへ学習課題を常設する。</td></tr>
+          <tr><td>長い入力では、関連情報の位置によってAIの利用精度が変わり得る。</td><td>文書契約、規範索引、安定IDを先に置き、必要箇所を直接参照できるようにする。</td><td>長文は必ず分割する、または全文を短い要約へ置換する。</td></tr>
+          <tr><td>意味を持つHTML要素は文書の構造と関係を表現する。</td><td>見出し、section、nav、figure、table、dlを意味に沿って使う。</td><td>セマンティックHTMLだけでAIの正確な理解を保証する。</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+    <section class="section" id="limits">
+      <h2>適用限界</h2>
+      <ul>
+        <li>学習成績を扱う研究結果を、参照文書や運用手順へ無条件に移植しない。</li>
+        <li>読みやすいという主観評価と、想起・転移・正確な実行を区別する。</li>
+        <li>行長、項目数、色数などに普遍的な魔法の数値を設定しない。</li>
+        <li>AIのモデル、ファイル解析方式、コンテキスト長が異なるため、通常参照での完全理解を断言しない。誤読要因を減らす設計とコールドリード監査を行う。</li>
+      </ul>
+    </section>
+    <section class="section" id="sources">
+      <h2>一次資料</h2>
+      <ol class="source-list">
+        <li><a href="https://doi.org/10.1016/0364-0213(88)90023-7">Sweller, Cognitive Load During Problem Solving, 1988</a></li>
+        <li><a href="https://pubmed.ncbi.nlm.nih.gov/11515286/">Cowan, The Magical Number 4, 2001</a></li>
+        <li><a href="https://pubmed.ncbi.nlm.nih.gov/15085132/">Vogel &amp; Machizawa, Neural Activity and Visual Working Memory Capacity, 2004</a></li>
+        <li><a href="https://doi.org/10.1037/0022-0663.93.2.377">Mautone &amp; Mayer, Signaling as a Cognitive Guide, 2001</a></li>
+        <li><a href="https://pubmed.ncbi.nlm.nih.gov/11414729/">Sanchez, Lorch &amp; Lorch, Effects of Headings, 2001</a></li>
+        <li><a href="https://doi.org/10.1207/s1532690xci0804_2">Chandler &amp; Sweller, Cognitive Load and Instruction Format, 1991</a></li>
+        <li><a href="https://doi.org/10.1037/0022-0663.91.2.358">Moreno &amp; Mayer, Modality and Contiguity, 1999</a></li>
+        <li><a href="https://eric.ed.gov/?id=EJ576496">Harp &amp; Mayer, Seductive Details, 1998</a></li>
+        <li><a href="https://doi.org/10.1207/S15326985EP3801_4">Kalyuga et al., Expertise Reversal Effect, 2003</a></li>
+        <li><a href="https://doi.org/10.1207/s1532690xci0201_3">Sweller &amp; Cooper, Worked Examples, 1985</a></li>
+        <li><a href="https://doi.org/10.1207/s15516709cog1302_1">Chi et al., Self-Explanations, 1989</a></li>
+        <li><a href="https://doi.org/10.1111/j.1467-9280.2006.01693.x">Roediger &amp; Karpicke, Test-Enhanced Learning, 2006</a></li>
+        <li><a href="https://doi.org/10.1162/tacl_a_00638">Liu et al., Lost in the Middle, 2024</a></li>
+        <li><a href="https://html.spec.whatwg.org/">WHATWG HTML Living Standard</a></li>
+        <li><a href="https://www.w3.org/TR/WCAG22/">W3C WCAG 2.2</a></li>
+      </ol>
+    </section>
+  </main>
+  <footer class="foot"><p>研究上の主張、適用条件、禁止推論を一組として管理する。</p></footer>
+</body>
+</html>
+

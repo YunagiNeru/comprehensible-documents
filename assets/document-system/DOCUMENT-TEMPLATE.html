@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="{{DOCUMENT_DESCRIPTION}}">
+  <title>{{DOCUMENT_TITLE}}</title>
+  <!-- 成果物では次の2ファイルを一つのstyle要素へ取り込む。 -->
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="document.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へ移動</a>
+  <div class="document">
+    <aside class="rail" aria-label="文書内索引">
+      <p class="rail__title">{{DOCUMENT_SHORT_TITLE}}</p>
+      <nav aria-label="主要章">
+        <ol>
+          <li><a href="#purpose">目的</a></li>
+          <li><a href="#overview">全体像</a></li>
+          <li><a href="#specification">正本仕様</a></li>
+          <li><a href="#open-items">未確定事項</a></li>
+        </ol>
+      </nav>
+    </aside>
+
+    <details class="mobile-index">
+      <summary>文書内索引</summary>
+      <nav aria-label="モバイル文書内索引">
+        <ol>
+          <li><a href="#purpose">目的</a></li>
+          <li><a href="#overview">全体像</a></li>
+          <li><a href="#specification">正本仕様</a></li>
+          <li><a href="#open-items">未確定事項</a></li>
+        </ol>
+      </nav>
+    </details>
+
+    <main class="page" id="main">
+      <header class="hero" id="top">
+        <p class="eyebrow">{{DOCUMENT_TYPE}}</p>
+        <h1>{{DOCUMENT_TITLE}}</h1>
+        <p class="lede">{{DOCUMENT_PURPOSE_STATEMENT}}</p>
+        <dl class="document-contract">
+          <div><dt>状態</dt><dd>{{DOCUMENT_STATUS}}</dd></div>
+          <div><dt>対象</dt><dd>{{DOCUMENT_SCOPE}}</dd></div>
+          <div><dt>対象外</dt><dd>{{DOCUMENT_OUT_OF_SCOPE}}</dd></div>
+          <div><dt>最終確認</dt><dd>{{LAST_VERIFIED_DATE}}</dd></div>
+        </dl>
+      </header>
+
+      <section class="section" id="purpose">
+        <header class="section__header">
+          <p class="section__label">01 / Contract</p>
+          <h2>目的と利用条件</h2>
+          <p class="section__lede">{{PURPOSE_AND_READER_TASK}}</p>
+        </header>
+        <div class="section__body">
+          <p>{{DOCUMENT_CONTRACT_BODY}}</p>
+          <div class="record-strip" aria-label="主要な確定事項">
+            <article class="record record--wide" id="DEC-001">
+              <header class="record__header">
+                <span class="record__id">DEC-001</span>
+                <h3 class="record__title">{{DECISION_TITLE}}</h3>
+                <span class="status status--approved">承認済み</span>
+              </header>
+              <dl class="record__meta">
+                <div><dt>種別</dt><dd>決定</dd></div>
+                <div><dt>規範強度</dt><dd>必須</dd></div>
+                <div><dt>適用範囲</dt><dd>{{DECISION_SCOPE}}</dd></div>
+              </dl>
+              <p class="record__statement">{{CANONICAL_DECISION_STATEMENT}}</p>
+              <details>
+                <summary>理由と影響</summary>
+                <p>{{DECISION_RATIONALE}}</p>
+              </details>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section section--wide" id="overview">
+        <header class="section__header">
+          <p class="section__label">02 / Map</p>
+          <h2>全体像</h2>
+          <p class="section__lede">{{OVERVIEW_GUIDE}}</p>
+        </header>
+        <figure class="diagram">
+          <svg viewBox="0 0 760 220" role="img" aria-labelledby="map-title map-description">
+            <title id="map-title">{{MAP_TITLE}}</title>
+            <desc id="map-description">{{MAP_TEXT_DESCRIPTION}}</desc>
+            <path class="edge" d="M220 110 H320 M440 110 H540"></path>
+            <rect class="node" x="20" y="60" width="200" height="100" rx="4"></rect>
+            <rect class="node node--focus" x="320" y="60" width="120" height="100" rx="4"></rect>
+            <rect class="node" x="540" y="60" width="200" height="100" rx="4"></rect>
+            <text x="120" y="115" text-anchor="middle">{{MAP_NODE_A}}</text>
+            <text x="380" y="115" text-anchor="middle">{{MAP_NODE_B}}</text>
+            <text x="640" y="115" text-anchor="middle">{{MAP_NODE_C}}</text>
+          </svg>
+          <figcaption>{{MAP_CONCLUSION_AND_REFERENCES}}</figcaption>
+        </figure>
+      </section>
+
+      <section class="section section--wide" id="specification">
+        <header class="section__header">
+          <p class="section__label">03 / Specification</p>
+          <h2>正本仕様</h2>
+          <p class="section__lede">{{SPECIFICATION_GUIDE}}</p>
+        </header>
+        <div class="table-wrap">
+          <table>
+            <caption>{{TABLE_CAPTION}}</caption>
+            <thead><tr><th scope="col">ID</th><th scope="col">状態</th><th scope="col">正本本文</th><th scope="col">適用範囲</th></tr></thead>
+            <tbody><tr><th scope="row"><a href="#REQ-001">REQ-001</a></th><td>承認済み</td><td>{{REQUIREMENT_STATEMENT}}</td><td>{{REQUIREMENT_SCOPE}}</td></tr></tbody>
+          </table>
+        </div>
+        <article class="record" id="REQ-001">
+          <header class="record__header"><span class="record__id">REQ-001</span><h3 class="record__title">{{REQUIREMENT_TITLE}}</h3><span class="status status--approved">承認済み</span></header>
+          <dl class="record__meta"><div><dt>種別</dt><dd>要求</dd></div><div><dt>規範強度</dt><dd>必須</dd></div><div><dt>適用範囲</dt><dd>{{REQUIREMENT_SCOPE}}</dd></div></dl>
+          <p class="record__statement">{{REQUIREMENT_STATEMENT}}</p>
+          <details><summary>理由・例外・証拠</summary><p>{{REQUIREMENT_RATIONALE}}</p></details>
+        </article>
+      </section>
+
+      <section class="section" id="open-items">
+        <header class="section__header"><p class="section__label">04 / Open</p><h2>未確定事項</h2><p class="section__lede">未確定がない場合も、その事実を明記する。</p></header>
+        <article class="record" id="OPN-001">
+          <header class="record__header"><span class="record__id">OPN-001</span><h3 class="record__title">{{OPEN_ITEM_TITLE}}</h3><span class="status status--open">未確定</span></header>
+          <dl class="record__meta"><div><dt>種別</dt><dd>未確定事項</dd></div><div><dt>規範強度</dt><dd>情報</dd></div><div><dt>解消条件</dt><dd>{{OPEN_ITEM_EXIT_CONDITION}}</dd></div></dl>
+          <p class="record__statement">{{OPEN_ITEM_STATEMENT}}</p>
+        </article>
+      </section>
+    </main>
+
+    <footer class="foot"><p>{{DOCUMENT_STATUS}} · 最終確認 {{LAST_VERIFIED_DATE}} · 正本 {{CANONICAL_LOCATION}}</p></footer>
+  </div>
+</body>
+</html>

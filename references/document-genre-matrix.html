@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="技術文書の目的に応じて章立てと正本単位を選ぶための文書種別マトリクス。">
+  <title>文書種別マトリクス</title>
+  <link rel="stylesheet" href="reference.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へ移動</a>
+  <aside class="rail" aria-label="文書内索引"><strong>文書種別</strong><nav aria-label="章一覧"><ul><li><a href="#selection">選択原則</a></li><li><a href="#matrix">種別一覧</a></li><li><a href="#mixing">複合文書</a></li></ul></nav></aside>
+  <main class="page" id="main">
+    <header class="hero"><p class="eyebrow">Genre / Reader Task</p><h1>文書種別マトリクス</h1><p class="lede">内容の種類ではなく、読者が文書を使って行う判断または作業から章立てを選ぶ。</p><dl class="meta"><div><dt>基準</dt><dd>読者の課題</dd></div><div><dt>固定しないもの</dt><dd>章数</dd></div><div><dt>共通</dt><dd>文書契約と正本ID</dd></div></dl></header>
+    <section class="section" id="selection">
+      <h2>選択原則</h2>
+      <p>文書名だけで種別を決めない。読者が最終的に要求を承認するのか、設計を実装するのか、障害を復旧するのか、概念を学ぶのかを確認する。</p>
+      <p>同じHTML内に複数種別が必要でも、文書全体を分割しない。主要目的を一つ選び、副次目的を明示したセクションとして統合する。</p>
+    </section>
+    <section class="section" id="matrix">
+      <h2>種別と推奨構造</h2>
+      <div class="table-wrap"><table><caption>文書目的、正本、推奨順序</caption><thead><tr><th scope="col">種別</th><th scope="col">読者の課題</th><th scope="col">正本単位</th><th scope="col">推奨する順序</th></tr></thead><tbody>
+        <tr><td>要求仕様</td><td>何を満たせば承認できるか判断する。</td><td>要求、制約、受入条件</td><td>目的 → 範囲 → 用語 → 要求 → 非機能 → 受入 → 未確定 → 追跡</td></tr>
+        <tr><td>概要設計</td><td>境界と主要構造を理解し、詳細化できるか判断する。</td><td>設計決定、境界、主要フロー</td><td>目的 → 文脈図 → 境界 → 構成 → フロー → セキュリティ → 運用 → 復旧 → 追跡</td></tr>
+        <tr><td>詳細設計</td><td>実装可能な契約と例外を確認する。</td><td>インターフェース、データ、状態、アルゴリズム</td><td>前提 → 契約 → データ → 状態遷移 → 処理 → 例外 → 性能 → テスト観点</td></tr>
+        <tr><td>ADR</td><td>なぜその決定を採用したか追跡する。</td><td>一つの意思決定</td><td>状態 → 文脈 → 決定 → 理由 → 代替案 → 影響 → 再検討条件</td></tr>
+        <tr><td>ランブック</td><td>安全に同じ操作結果へ到達する。</td><td>開始条件、操作、期待結果、停止条件</td><td>事象 → 安全条件 → 前提 → 手順 → 期待結果 → 失敗時分岐 → ロールバック → エスカレーション</td></tr>
+        <tr><td>運用・セキュリティ</td><td>責任、権限、監視、復旧を判断する。</td><td>統制、責任境界、検知、対応</td><td>資産 → アクター → 脅威・障害 → 統制 → 監視 → 対応 → 復旧 → 監査証跡</td></tr>
+        <tr><td>API・参照</td><td>正しい値や契約を素早く検索する。</td><td>定義、署名、フィールド、制約</td><td>索引 → 共通規則 → 項目別仕様 → 例 → エラー → 互換性</td></tr>
+        <tr><td>調査・分析</td><td>証拠から結論の妥当性を評価する。</td><td>問い、観測、推論、結論</td><td>問い → 方法 → 証拠 → 観測 → 解釈 → 反証 → 結論 → 限界</td></tr>
+        <tr><td>教育・解説</td><td>概念を理解し、別の課題へ適用する。</td><td>概念モデル、完成例、練習</td><td>到達目標 → 前提知識 → モデル → 完成例 → 理由 → 練習 → 確認</td></tr>
+      </tbody></table></div>
+    </section>
+    <section class="section" id="mixing">
+      <h2>複合文書の扱い</h2>
+      <ul><li>主要目的を文書契約で一つ宣言する。</li><li>副次目的は独立した見出しと正本IDで境界を示す。</li><li>要求と設計を混在させる場合、要求を設計上の決定へ言い換えない。</li><li>操作手順を含む場合、説明文と実行手順を視覚的・意味的に区別する。</li><li>教育技法は教育セクションだけへ適用し、参照や運用の検索性を損なわない。</li></ul>
+    </section>
+  </main>
+  <footer class="foot"><p>文書種別は見た目ではなく、読者が完了すべき課題で決める。</p></footer>
+</body>
+</html>
+

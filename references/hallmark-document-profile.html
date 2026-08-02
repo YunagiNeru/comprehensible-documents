@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="Hallmarkを基礎にした技術文書用の視覚構成プロファイル。">
+  <title>Hallmark文書プロファイル</title>
+  <link rel="stylesheet" href="reference.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へ移動</a>
+  <aside class="rail" aria-label="文書内索引"><strong>Hallmark Profile</strong><nav aria-label="章一覧"><ul><li><a href="#profile">採用構成</a></li><li><a href="#adaptation">文書向け適応</a></li><li><a href="#components">構成要素</a></li><li><a href="#responsive">応答性</a></li></ul></nav></aside>
+  <main class="page" id="main">
+    <header class="hero"><p class="eyebrow">Map / Modern Minimal / Cobalt</p><h1>Hallmark文書プロファイル</h1><p class="lede">概要設計書で確立した精密な青系文書体系を、要件、設計、運用、参照へ共通適用する。</p><dl class="meta"><div><dt>マクロ構造</dt><dd>Map / Diagram</dd></div><div><dt>ジャンル</dt><dd>modern-minimal</dd></div><div><dt>テーマ</dt><dd>適応版Cobalt</dd></div></dl></header>
+    <section class="section" id="profile">
+      <h2>採用構成</h2>
+      <div class="table-wrap"><table><caption>Hallmark構成と文書での役割</caption><thead><tr><th scope="col">要素</th><th scope="col">採用</th><th scope="col">役割</th></tr></thead><tbody>
+        <tr><td>Map / Diagram</td><td>採用</td><td>システム、依存、状態、手順の全体像を示す。</td></tr>
+        <tr><td>modern-minimal</td><td>採用</td><td>技術的で静かな階層、十分な余白、明確な左揃えを作る。</td></tr>
+        <tr><td>Cobalt</td><td>適応採用</td><td>冷色の紙面、電気的な青の信号、細い罫線、狭い角丸を使う。</td></tr>
+        <tr><td>N3 Side-rail</td><td>適応採用</td><td>長文の現在地と主要章への移動を支える。</td></tr>
+        <tr><td>F3 Tabular spec sheet</td><td>採用</td><td>反復フィールド、仕様、比較を表す。</td></tr>
+        <tr><td>F4 Step sequence</td><td>採用</td><td>処理、運用、状態遷移を順序付きで表す。</td></tr>
+        <tr><td>Ft2 Inline rule</td><td>採用</td><td>文書管理情報を一行で閉じる。</td></tr>
+      </tbody></table></div>
+    </section>
+    <section class="section" id="adaptation">
+      <h2>文書向けの適応</h2>
+      <p>Cobaltの製品ページ向け要素をそのまま使わない。技術文書の自己完結性、静的閲覧、AIによる直接参照を優先する。</p>
+      <ul><li>外部Webフォントを使わず、ローカルの表示、本文、等幅フォントを指定する。</li><li>コマンドパレット、JavaScript、スクロール演出、タイプ入力を使わない。</li><li>コードを主役にせず、文書契約と全体図を主役にする。</li><li>暗色帯はコードや危険状態など意味がある場合だけ使う。</li><li>影より罫線と余白で階層を作る。</li><li>青は状態、選択、参照、焦点に限定し、面積を広げない。</li></ul>
+    </section>
+    <section class="section" id="components">
+      <h2>文書構成要素</h2>
+      <ol><li><strong>サイドレール:</strong> 文書名と主要章。デスクトップだけで固定し、本文を覆わない。</li><li><strong>モバイル索引:</strong> サイドレールの代わりに通常フローの <code>details</code> を使う。</li><li><strong>ヒーロー:</strong> 文書種別、題名、目的、状態、範囲、最終確認を最初の画面に置く。</li><li><strong>規範帯:</strong> 主要決定や制約を正本レコードとして冒頭へ置く。</li><li><strong>図:</strong> 静的SVG、見出し、説明、正本ID参照を一つの <code>figure</code> に置く。</li><li><strong>仕様表:</strong> caption、列見出し、行見出し、単位、注記を持つ。</li><li><strong>段階列:</strong> 番号、開始条件、操作、期待結果、失敗分岐を同じ段階に置く。</li><li><strong>フッター:</strong> 状態、最終確認、正本位置を簡潔に示す。</li></ol>
+      <h3>避ける構造</h3>
+      <ul><li>同じ大きさのカードを3枚並べるだけの章。</li><li>見出しごとに意味のない英語ラベルを付ける。</li><li>カードの中へカードを重ねる。</li><li>装飾目的のグラデーション、ガラス表現、絵文字アイコン。</li><li>図表を置くために事実や数値を作る。</li></ul>
+    </section>
+    <section class="section" id="responsive">
+      <h2>応答性と印刷</h2>
+      <ul><li>モバイルファーストで組み、デスクトップでサイドレールと複数列を追加する。</li><li><code>html</code> と <code>body</code> に <code>overflow-x: clip</code> を適用する。</li><li>表示見出しに長語の折り返しを許可する。</li><li>表は意味を壊してカード化せず、必要なら表領域だけ横スクロール可能にする。</li><li>固定レールを狭い幅で非表示にし、本文内索引へ置き換える。</li><li>印刷ではナビゲーションを除き、リンク先を失わず、改ページで見出しと本文を分断しない。</li></ul>
+    </section>
+  </main>
+  <footer class="foot"><p>Hallmarkの視覚体系は、文書の論理構造を支えるために使う。</p></footer>
+</body>
+</html>
+

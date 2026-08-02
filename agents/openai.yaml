@@ -1,0 +1,6 @@
+interface:
+  display_name: "Comprehensible Documents"
+  short_description: "人間とAIが直接読める単一HTML文書を作成・改訂・監査"
+  default_prompt: "$comprehensible-documents を使用して、人間とAIが通常参照だけで読める自己完結HTML文書を作成してください。"
+policy:
+  allow_implicit_invocation: true

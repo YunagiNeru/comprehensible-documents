@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="理解可能な単一HTML文書を完成と判定する品質ゲート。">
+  <title>文書品質ゲート</title>
+  <link rel="stylesheet" href="reference.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へ移動</a>
+  <aside class="rail" aria-label="文書内索引"><strong>品質ゲート</strong><nav aria-label="章一覧"><ul><li><a href="#debt">理解負債</a></li><li><a href="#gates">合格条件</a></li><li><a href="#machine">機械監査</a></li><li><a href="#report">報告</a></li></ul></nav></aside>
+  <main class="page" id="main">
+    <header class="hero"><p class="eyebrow">Quality / No Cognitive Score</p><h1>文書品質ゲート</h1><p class="lede">理解度を疑似的に点数化せず、誤読、探索、更新を生む具体的な負債と構造違反を検出する。</p><dl class="meta"><div><dt>機械判定</dt><dd>構文・構造</dd></div><div><dt>人間判定</dt><dd>意味・判断可能性</dd></div><div><dt>完了</dt><dd>ERROR 0</dd></div></dl></header>
+    <section class="section" id="debt">
+      <h2>理解負債の分類</h2>
+      <div class="table-wrap"><table><caption>負債、兆候、修正方向</caption><thead><tr><th scope="col">負債</th><th scope="col">兆候</th><th scope="col">修正</th></tr></thead><tbody>
+        <tr><td>文脈負債</td><td>目的、読者、範囲、時点が不明。</td><td>文書契約を明示する。</td></tr>
+        <tr><td>探索負債</td><td>必要情報の位置が予測できない。</td><td>読者課題に沿う見出し、索引、安定IDを使う。</td></tr>
+        <tr><td>推論負債</td><td>事実、決定、推奨、未確定の区別がない。</td><td>種別、状態、規範強度を可視化する。</td></tr>
+        <tr><td>統合負債</td><td>図、表、説明、例外が離れている。</td><td>関連情報を近接させ、IDで結ぶ。</td></tr>
+        <tr><td>更新負債</td><td>同じ規則が複数箇所にある。</td><td>正本を一つにし、他は参照にする。</td></tr>
+        <tr><td>状態負債</td><td>確定、廃止、置換、未確認が不明。</td><td>状態と置換先、最終確認を示す。</td></tr>
+      </tbody></table></div>
+    </section>
+    <section class="section" id="gates">
+      <h2>意味上の合格条件</h2>
+      <ol><li><strong>目的:</strong> 読了後の判断または行動が明確である。</li><li><strong>範囲:</strong> 対象、対象外、前提、時点が明確である。</li><li><strong>正本:</strong> 要求や決定が一か所にあり、言い換えた重複がない。</li><li><strong>状態:</strong> 確定、提案、未確定、廃止、置換済みを識別できる。</li><li><strong>規範:</strong> 必須、禁止、推奨、任意、情報を区別できる。</li><li><strong>追跡:</strong> 理由、影響、例外、証拠、関連記述へ到達できる。</li><li><strong>通常参照:</strong> Skillなしで人間とAIが同じ本文を解釈できる。</li><li><strong>単一成果物:</strong> 読者別の派生文書や外部表示依存がない。</li><li><strong>誠実性:</strong> 未確認情報、数値、状態を創作していない。</li><li><strong>行動可能性:</strong> 実装、運用、承認の次の行動が判断できる。</li></ol>
+      <h3>視覚上の合格条件</h3>
+      <ul><li>階層が余白、書体、位置、罫線で分かり、色だけに依存しない。</li><li>図表が必要な関係を表し、装飾目的で置かれていない。</li><li>見出しだけで文書の論理を追える。</li><li>狭い表示幅で本文を覆う固定要素やページ全体の横溢れがない。</li><li>焦点、コントラスト、意味構造がWCAGの基礎要件を満たす。</li></ul>
+    </section>
+    <section class="section" id="machine">
+      <h2>機械監査の範囲</h2>
+      <p><code>audit_document.py</code> は、検査可能な構文と構造だけを扱う。</p>
+      <ul><li>ファイル名、DOCTYPE、言語、文字コード、viewport、title。</li><li>見出し階層、main、h1、section、ID、内部リンク。</li><li>画像代替、figureの説明、tableのcaptionと見出し。</li><li>外部スタイル、外部画像、JavaScript、過大な埋め込みデータ。</li><li>規範レコードID、必須フィールド、重複本文。</li><li>必須・禁止事項がdetailsだけへ隠れていないか。</li></ul>
+      <div class="callout"><p>機械監査の成功は、人間やAIの理解を保証しない。意味上のコールドリード監査を別に行う。</p></div>
+    </section>
+    <section class="section" id="report">
+      <h2>監査報告</h2>
+      <p>監査結果は、結論、正本性、理解負債、人間・AI共通可読性、推奨修正の順で示す。指摘には対象ファイル、見出しまたはID、理由、修正方針を含める。</p>
+      <p>監査だけを依頼された場合はファイルを変更しない。作成または改訂を依頼された場合だけ、適用される承認手順に従って修正する。</p>
+    </section>
+  </main>
+  <footer class="foot"><p>「読みやすそう」ではなく、誤読と再構築が必要な箇所を具体的に検査する。</p></footer>
+</body>
+</html>

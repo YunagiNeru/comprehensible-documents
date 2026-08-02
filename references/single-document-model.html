@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="正本、成果物、読者を分けない単一ドキュメント設計。">
+  <title>単一ドキュメントモデル</title>
+  <link rel="stylesheet" href="reference.css">
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へ移動</a>
+  <aside class="rail" aria-label="文書内索引"><strong>単一ドキュメント</strong><nav aria-label="章一覧"><ul><li><a href="#definition">三つの単一性</a></li><li><a href="#layers">内部構造</a></li><li><a href="#records">正本レコード</a></li><li><a href="#split">分割禁止</a></li></ul></nav></aside>
+  <main class="page" id="main">
+    <header class="hero"><p class="eyebrow">Single Source / Single Artifact</p><h1>単一ドキュメントモデル</h1><p class="lede">文書を読者別に分けず、一つの自己完結HTML内で全体像、正本、理由、証拠へ到達できるようにする。</p><dl class="meta"><div><dt>正本</dt><dd>一つ</dd></div><div><dt>成果物</dt><dd>一つのHTML</dd></div><div><dt>読者</dt><dd>人間とAIで共通</dd></div></dl></header>
+    <section class="section" id="definition">
+      <h2>三つの単一性</h2>
+      <ol><li><strong>正本の単一性:</strong> 同じ要求、決定、制約は一か所だけに記録する。</li><li><strong>成果物の単一性:</strong> 一つの目的に対して一つの自己完結HTMLを生成する。</li><li><strong>読者の単一性:</strong> 人間用とAI用の派生文書を作らず、同じ可視情報を参照する。</li></ol>
+    </section>
+    <section class="section" id="layers">
+      <h2>一つのHTML内の解像度</h2>
+      <div class="table-wrap"><table><caption>情報層と役割</caption><thead><tr><th scope="col">層</th><th scope="col">内容</th><th scope="col">規則</th></tr></thead><tbody>
+        <tr><td>文書契約</td><td>目的、範囲、状態、前提、未確定、読み方</td><td>冒頭に置き、初見の解釈条件を揃える。</td></tr>
+        <tr><td>規範レコード</td><td>要求、決定、制約、禁止、前提</td><td>短い正本本文を可視状態で置く。</td></tr>
+        <tr><td>理解支援</td><td>理由、仕組み、影響、例、図表</td><td>同じレコードまたはID参照で結ぶ。</td></tr>
+        <tr><td>証拠と例外</td><td>出典、検証、境界条件、反例、変更理由</td><td>必要に応じて展開するが、安全条件を隠さない。</td></tr>
+      </tbody></table></div>
+      <p>層は別文書ではなく、同じ正本へ異なる深さで到達するための内部構造である。</p>
+    </section>
+    <section class="section" id="records">
+      <h2>正本レコード</h2>
+      <p>規範レコードは、安定ID、種別、状態、規範強度、正本本文、適用範囲を持つ。理由や証拠は正本本文を言い換えず、その意味を説明する。</p>
+      <ul><li>主要決定帯を置く場合、その本文自体を正本にする。</li><li>後続セクションは正本IDを参照し、決定を再記述しない。</li><li>図はレコード間の関係を表示するビューであり、正本ではない。</li><li>一覧は索引として扱い、正本を短縮して別の規則を作らない。</li></ul>
+    </section>
+    <section class="section" id="split">
+      <h2>分割で解決しない</h2>
+      <p>長さ、章数、担当者、更新頻度、熟達度、AIコンテキストを理由に自動分割しない。索引、安定ID、セクション、段階的開示によって一つの文書を保つ。</p>
+      <div class="callout"><p>機密区分やアクセス制御が一つのファイルでは成立しない場合は、思想と安全性の競合を報告する。分割案を提示しても、明示的な承認なしに実行しない。</p></div>
+      <h3>自己完結性</h3>
+      <ul><li>生成物へCSSを取り込み、外部スタイルに依存しない。</li><li>構造図は単純なインラインSVGを基本とする。</li><li>JavaScript、外部フォント、実行時依存を原則として持たない。</li><li>HTML単体を移動しても、内容と表示の意味が失われないようにする。</li></ul>
+    </section>
+  </main>
+  <footer class="foot"><p>情報量の問題は、文書分割ではなく到達経路の設計で解決する。</p></footer>
+</body>
+</html>
