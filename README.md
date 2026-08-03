@@ -213,3 +213,7 @@ python -m unittest discover -s scripts -p "test_*.py" -v
 ```
 
 期待される結果は、バンドル検証が `ERROR 0`、すべての回帰テストが `OK` になることです。
+
+## ライセンス
+
+[MIT License](./LICENSE)に基づいて利用できます。

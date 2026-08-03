@@ -213,3 +213,7 @@ python -m unittest discover -s scripts -p "test_*.py" -v
 ```
 
 The bundle validation must end with `ERROR 0`, and all regression tests must end with `OK`.
+
+## License
+
+Licensed under the [MIT License](./LICENSE).
