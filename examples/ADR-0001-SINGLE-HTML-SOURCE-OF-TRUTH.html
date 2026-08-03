@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="技術文書の正本を一つの自己完結HTMLへ統合する設計判断の記録。">
+  <title>文書の正本を単一HTMLへ統合する</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --font-display: "Bahnschrift", "Arial Narrow", ui-sans-serif, sans-serif;
+      --font-body: "Aptos", "Segoe UI", "Yu Gothic UI", "Yu Gothic", ui-sans-serif, sans-serif;
+      --font-mono: "Cascadia Mono", "Consolas", ui-monospace, monospace;
+      --color-paper: oklch(97.5% 0.009 258);
+      --color-paper-raised: oklch(99% 0.006 258);
+      --color-paper-subtle: oklch(94.5% 0.014 258);
+      --color-ink: oklch(19% 0.025 258);
+      --color-ink-soft: oklch(37% 0.028 258);
+      --color-muted: oklch(49% 0.025 258);
+      --color-rule: oklch(82% 0.022 258);
+      --color-rule-strong: oklch(67% 0.035 258);
+      --color-accent: oklch(52% 0.19 258);
+      --color-accent-strong: oklch(42% 0.18 258);
+      --color-accent-soft: oklch(92% 0.045 258);
+      --color-focus: oklch(56% 0.2 258);
+      --color-positive: oklch(42% 0.11 151);
+      --color-positive-soft: oklch(93% 0.035 151);
+      --color-warning: oklch(47% 0.105 76);
+      --color-warning-soft: oklch(94% 0.045 76);
+      --color-danger: oklch(44% 0.16 28);
+      --color-danger-soft: oklch(93% 0.045 28);
+      --color-shadow: oklch(19% 0.025 258 / 0.09);
+      --space-3xs: 0.125rem;
+      --space-2xs: 0.25rem;
+      --space-xs: 0.5rem;
+      --space-sm: 0.75rem;
+      --space-md: 1rem;
+      --space-lg: 1.5rem;
+      --space-xl: 2.5rem;
+      --space-2xl: 4rem;
+      --space-3xl: 6rem;
+      --text-xs: 0.75rem;
+      --text-sm: 0.875rem;
+      --text-base: 1rem;
+      --text-md: 1.25rem;
+      --text-lg: 1.5625rem;
+      --text-xl: 1.953rem;
+      --text-2xl: 2.441rem;
+      --text-3xl: 3.052rem;
+      --text-display: clamp(2.45rem, 5vw + 0.5rem, 5.25rem);
+      --leading-display: 1.08;
+      --leading-heading: 1.2;
+      --leading-body: 1.65;
+      --measure: 72ch;
+      --page-max: 96rem;
+      --rail-width: 13rem;
+      --radius-xs: 0.125rem;
+      --radius-sm: 0.25rem;
+      --radius-md: 0.5rem;
+      --border-hairline: 0.0625rem;
+      --border-strong: 0.125rem;
+      --shadow-whisper: 0 0.125rem 0.5rem var(--color-shadow);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body { overflow-x: clip; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--color-paper);
+      color: var(--color-ink);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: var(--leading-body);
+      text-rendering: optimizeLegibility;
+    }
+    img, svg { display: block; max-width: 100%; }
+    a {
+      color: var(--color-accent-strong);
+      text-decoration-thickness: var(--border-hairline);
+      text-underline-offset: var(--space-2xs);
+    }
+    a:hover { color: var(--color-accent); }
+    a:focus-visible, summary:focus-visible {
+      outline: var(--border-strong) solid var(--color-focus);
+      outline-offset: var(--space-2xs);
+    }
+    code, kbd, samp {
+      font-family: var(--font-mono);
+      font-size: .92em;
+      font-variant-numeric: tabular-nums;
+    }
+    code {
+      padding: var(--space-3xs) var(--space-2xs);
+      background: var(--color-paper-subtle);
+      border-radius: var(--radius-xs);
+    }
+    pre {
+      margin: 0;
+      padding: var(--space-lg);
+      overflow: auto;
+      background: var(--color-ink);
+      color: var(--color-paper-raised);
+      border-radius: var(--radius-sm);
+      font: var(--text-sm)/1.6 var(--font-mono);
+      tab-size: 2;
+    }
+    h1, h2, h3, h4 {
+      margin: 0;
+      min-width: 0;
+      font-family: var(--font-display);
+      font-style: normal;
+      line-height: var(--leading-heading);
+      letter-spacing: -.025em;
+      overflow-wrap: anywhere;
+    }
+    h1 { max-width: 18ch; font-size: var(--text-display); line-height: var(--leading-display); }
+    .title-line { display: inline; }
+    h2 { max-width: 26ch; font-size: clamp(var(--text-xl), 4vw, var(--text-3xl)); }
+    h3 { font-size: var(--text-lg); }
+    h4 { font-size: var(--text-md); }
+    p, ul, ol, dl { margin: 0; }
+    ul, ol { padding-inline-start: var(--space-lg); }
+    li + li { margin-block-start: var(--space-xs); }
+    table { width: 100%; min-width: 44rem; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+    caption {
+      padding-block-end: var(--space-sm);
+      color: var(--color-ink-soft);
+      font-weight: 700;
+      text-align: start;
+    }
+    th, td {
+      padding: var(--space-sm) var(--space-md);
+      border-block-end: var(--border-hairline) solid var(--color-rule);
+      text-align: start;
+      vertical-align: top;
+    }
+    th { background: var(--color-paper-subtle); font-weight: 700; }
+    tbody tr:last-child > * { border-block-end: 0; }
+
+    .skip-link {
+      position: fixed;
+      inset: var(--space-xs) auto auto var(--space-xs);
+      z-index: 100;
+      transform: translateY(-180%);
+      padding: var(--space-sm) var(--space-md);
+      background: var(--color-ink);
+      color: var(--color-paper-raised);
+      border-radius: var(--radius-sm);
+    }
+    .skip-link:focus { transform: none; }
+    .document { width: min(100%, var(--page-max)); margin-inline: auto; }
+    .rail { display: none; }
+    .mobile-index {
+      margin: var(--space-md);
+      padding: var(--space-md);
+      background: var(--color-paper-raised);
+      border: var(--border-hairline) solid var(--color-rule);
+      border-radius: var(--radius-sm);
+    }
+    .mobile-index summary { cursor: pointer; font-weight: 700; }
+    .mobile-index ol { margin-block-start: var(--space-md); }
+    .page { min-width: 0; }
+
+    .hero {
+      padding: var(--space-2xl) clamp(var(--space-md), 5vw, var(--space-3xl)) var(--space-3xl);
+      border-block-end: var(--border-hairline) solid var(--color-rule);
+    }
+    .eyebrow {
+      margin-block-end: var(--space-lg);
+      color: var(--color-accent-strong);
+      font: 700 var(--text-xs)/1.2 var(--font-mono);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .lede {
+      max-width: 58ch;
+      margin-block-start: var(--space-lg);
+      color: var(--color-ink-soft);
+      font-size: var(--text-md);
+    }
+    .document-contract {
+      display: grid;
+      gap: var(--space-md) var(--space-lg);
+      margin-block-start: var(--space-xl);
+    }
+    .document-contract div {
+      padding-block-start: var(--space-sm);
+      border-block-start: var(--border-hairline) solid var(--color-rule);
+    }
+    .document-contract dt {
+      color: var(--color-muted);
+      font: 700 var(--text-xs)/1.2 var(--font-mono);
+      letter-spacing: .04em;
+    }
+    .document-contract dd { margin: var(--space-2xs) 0 0; font-weight: 650; }
+
+    .section {
+      max-width: var(--measure);
+      margin-inline: auto;
+      padding: var(--space-2xl) clamp(var(--space-md), 5vw, var(--space-3xl));
+      scroll-margin-block-start: var(--space-lg);
+    }
+    .section + .section { border-block-start: var(--border-hairline) solid var(--color-rule); }
+    .section--wide { max-width: 78rem; }
+    .section > * + *, .section__body > * + * { margin-block-start: var(--space-lg); }
+    .section__header {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-sm);
+      margin-block-end: var(--space-xl);
+    }
+    .section__label {
+      color: var(--color-accent-strong);
+      font: 700 var(--text-xs)/1.2 var(--font-mono);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .section__lede { max-width: 58ch; color: var(--color-ink-soft); font-size: var(--text-md); }
+
+    .record-grid { display: grid; gap: var(--space-md); }
+    .record {
+      padding: var(--space-lg);
+      background: var(--color-paper-raised);
+      border: var(--border-hairline) solid var(--color-rule);
+      border-radius: var(--radius-sm);
+    }
+    .record:target { outline: var(--border-strong) solid var(--color-focus); outline-offset: var(--space-2xs); }
+    .record__header { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-sm); }
+    .record__id { color: var(--color-accent-strong); font: 700 var(--text-xs)/1.2 var(--font-mono); }
+    .record__title { font-size: var(--text-md); }
+    .record__meta { display: grid; gap: var(--space-xs) var(--space-md); margin-block-start: var(--space-md); }
+    .record__meta div {
+      display: grid;
+      grid-template-columns: minmax(6rem, auto) minmax(0, 1fr);
+      gap: var(--space-sm);
+      padding-block: var(--space-xs);
+      border-block-start: var(--border-hairline) solid var(--color-rule);
+    }
+    .record__meta dt { color: var(--color-muted); font: 700 var(--text-xs)/1.4 var(--font-mono); }
+    .record__meta dd { margin: 0; }
+    .record__statement {
+      margin-block-start: var(--space-lg);
+      font-size: var(--text-md);
+      font-weight: 700;
+      line-height: 1.5;
+    }
+    .record details {
+      margin-block-start: var(--space-lg);
+      padding-block-start: var(--space-md);
+      border-block-start: var(--border-hairline) solid var(--color-rule);
+    }
+    .record summary { cursor: pointer; color: var(--color-accent-strong); font-weight: 700; }
+    .record details > * + * { margin-block-start: var(--space-md); }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      min-height: 1.75rem;
+      padding: var(--space-2xs) var(--space-sm);
+      border: var(--border-hairline) solid currentColor;
+      border-radius: var(--radius-sm);
+      font: 700 var(--text-xs)/1 var(--font-mono);
+      white-space: nowrap;
+    }
+    .status--approved { color: var(--color-positive); background: var(--color-positive-soft); }
+    .status--open { color: var(--color-warning); background: var(--color-warning-soft); }
+    .status--prohibited { color: var(--color-danger); background: var(--color-danger-soft); }
+
+    .diagram {
+      margin: 0;
+      padding: var(--space-lg);
+      background: var(--color-paper-raised);
+      border: var(--border-hairline) solid var(--color-rule);
+      border-radius: var(--radius-sm);
+    }
+    .diagram svg { width: 100%; height: auto; }
+    .diagram figcaption { margin-block-start: var(--space-md); color: var(--color-ink-soft); }
+    .diagram .node { fill: var(--color-paper-raised); stroke: var(--color-rule-strong); stroke-width: 1.5; }
+    .diagram .node--focus { fill: var(--color-accent-soft); stroke: var(--color-accent); }
+    .diagram .edge { fill: none; stroke: var(--color-rule-strong); stroke-width: 2; }
+    .diagram .arrow { fill: var(--color-rule-strong); }
+    .diagram text { fill: var(--color-ink); font-family: var(--font-body); font-size: 15px; font-weight: 650; }
+    .diagram .subtext { fill: var(--color-muted); font-size: 12px; font-weight: 500; }
+
+    .table-wrap { overflow-x: auto; border-block: var(--border-hairline) solid var(--color-rule-strong); }
+    .steps { padding: 0; list-style: none; counter-reset: stage; }
+    .steps li {
+      position: relative;
+      display: grid;
+      grid-template-columns: auto minmax(0, 1fr);
+      gap: var(--space-md);
+      padding-block: var(--space-lg);
+      border-block-end: var(--border-hairline) solid var(--color-rule);
+      counter-increment: stage;
+    }
+    .steps li::before {
+      content: counter(stage, decimal-leading-zero);
+      color: var(--color-accent-strong);
+      font: 700 var(--text-sm)/1.3 var(--font-mono);
+    }
+    .steps li > div > * + * { margin-block-start: var(--space-sm); }
+    .callout {
+      padding: var(--space-lg);
+      background: var(--color-accent-soft);
+      border: var(--border-hairline) solid var(--color-rule);
+      border-radius: var(--radius-sm);
+    }
+    .callout--warning { background: var(--color-warning-soft); }
+    .foot {
+      padding: var(--space-lg) clamp(var(--space-md), 5vw, var(--space-3xl));
+      border-block-start: var(--border-hairline) solid var(--color-rule);
+      color: var(--color-muted);
+      font-size: var(--text-sm);
+    }
+
+    @media (min-width: 44rem) {
+      .title-line { display: block; }
+      .document-contract { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .record-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 43.999rem) {
+      .diagram { overflow-x: auto; }
+      .diagram svg { width: 52rem; max-width: none; }
+    }
+    @media (min-width: 64rem) {
+      .rail {
+        position: fixed;
+        inset: 0 auto 0 0;
+        z-index: 20;
+        display: flex;
+        width: var(--rail-width);
+        flex-direction: column;
+        gap: var(--space-xl);
+        padding: var(--space-lg);
+        background: var(--color-paper-raised);
+        border-inline-end: var(--border-hairline) solid var(--color-rule);
+      }
+      .rail__eyebrow {
+        color: var(--color-accent-strong);
+        font: 700 var(--text-xs)/1.2 var(--font-mono);
+        letter-spacing: .08em;
+        text-transform: uppercase;
+      }
+      .rail__title { margin-block-start: var(--space-xs); font-family: var(--font-display); font-weight: 700; line-height: 1.2; }
+      .rail ol { padding: 0; list-style: none; }
+      .rail li + li { margin-block-start: var(--space-sm); }
+      .rail a { color: var(--color-ink-soft); font-size: var(--text-sm); text-decoration: none; }
+      .rail a:hover { color: var(--color-accent); text-decoration: underline; }
+      .rail__status { margin-block-start: auto; color: var(--color-muted); font: var(--text-xs)/1.5 var(--font-mono); }
+      .mobile-index { display: none; }
+      .page, .foot { margin-inline-start: var(--rail-width); }
+      .document-contract { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+    @media print {
+      .rail, .mobile-index, .skip-link { display: none; }
+      .page, .foot { margin: 0; }
+      body { background: var(--color-paper-raised); color: var(--color-ink); }
+      .section, .record, .diagram { break-inside: avoid; }
+      h2, h3 { break-after: avoid; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へ移動</a>
+  <div class="document">
+    <aside class="rail" aria-label="文書内索引">
+      <div>
+        <p class="rail__eyebrow">ADR-0001</p>
+        <p class="rail__title">単一HTMLの正本</p>
+      </div>
+      <nav aria-label="主要章">
+        <ol>
+          <li><a href="#decision">設計判断</a></li>
+          <li><a href="#context">判断の背景</a></li>
+          <li><a href="#options">選択肢</a></li>
+          <li><a href="#model">文書モデル</a></li>
+          <li><a href="#rules">正本規則</a></li>
+          <li><a href="#verification">検証方法</a></li>
+          <li><a href="#consequences">影響と限界</a></li>
+        </ol>
+      </nav>
+      <p class="rail__status">承認済み<br>2026-08-03</p>
+    </aside>
+
+    <details class="mobile-index">
+      <summary>文書内索引</summary>
+      <nav aria-label="モバイル文書内索引">
+        <ol>
+          <li><a href="#decision">設計判断</a></li>
+          <li><a href="#context">判断の背景</a></li>
+          <li><a href="#options">選択肢</a></li>
+          <li><a href="#model">文書モデル</a></li>
+          <li><a href="#rules">正本規則</a></li>
+          <li><a href="#verification">検証方法</a></li>
+          <li><a href="#consequences">影響と限界</a></li>
+        </ol>
+      </nav>
+    </details>
+
+    <main class="page" id="main">
+      <header class="hero" id="top">
+        <p class="eyebrow">Architecture Decision Record / ADR-0001</p>
+        <h1><span class="title-line">文書の正本を</span><span class="title-line">単一HTMLへ統合する</span></h1>
+        <p class="lede">仕様、設計、運用の判断根拠を、人間とAIが同じ可視情報から確認できる自己完結HTMLとして管理する。</p>
+        <dl class="document-contract">
+          <div><dt>状態</dt><dd>承認済み</dd></div>
+          <div><dt>対象</dt><dd>技術文書の作成と改訂</dd></div>
+          <div><dt>対象外</dt><dd>アクセス制御が異なる情報</dd></div>
+          <div><dt>最終確認</dt><dd>2026-08-03</dd></div>
+        </dl>
+      </header>
+
+      <section class="section" id="decision">
+        <header class="section__header">
+          <p class="section__label">01 / Decision</p>
+          <h2>設計判断</h2>
+          <p class="section__lede">この記録が確定する内容と、適用条件を最初に示す。</p>
+        </header>
+        <article class="record" id="DEC-001">
+          <header class="record__header">
+            <span class="record__id">DEC-001</span>
+            <h3 class="record__title">正本と成果物の統合</h3>
+            <span class="status status--approved">承認済み</span>
+          </header>
+          <dl class="record__meta">
+            <div><dt>種別</dt><dd>決定</dd></div>
+            <div><dt>規範強度</dt><dd>必須</dd></div>
+            <div><dt>適用範囲</dt><dd>同じアクセス権で共有できる一つの文書目的</dd></div>
+          </dl>
+          <p class="record__statement">要求、決定、制約、理由、例外、検証方法を、一つの自己完結HTML内で管理する。</p>
+          <details open>
+            <summary>理由と適用条件</summary>
+            <p>正本を一か所に置けば、読者は複数資料から正しい記述を再構築せずに済み、更新者は同じ規則の写しを同期する必要がない。</p>
+            <p>機密区分やアクセス制御が異なり、一つのファイルでは安全性が成立しない場合は、この決定をそのまま適用せず、分割の承認を別に得る。</p>
+          </details>
+        </article>
+      </section>
+
+      <section class="section section--wide" id="context">
+        <header class="section__header">
+          <p class="section__label">02 / Context</p>
+          <h2>判断の背景</h2>
+          <p class="section__lede">文書の長さではなく、読者が情報を探し、結び付け、更新するための負担を問題にする。</p>
+        </header>
+        <div class="table-wrap">
+          <table>
+            <caption>分散した文書から生じる理解負債</caption>
+            <thead>
+              <tr><th scope="col">負債</th><th scope="col">観測できる兆候</th><th scope="col">この判断による扱い</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">探索負債</th><td>必要な条件が複数ファイルへ散らばり、位置を予測できない。</td><td>索引、見出し、安定IDで同じHTML内の到達先を示す。</td></tr>
+              <tr><th scope="row">推論負債</th><td>事実、決定、推奨、未確定の区別がない。</td><td>種別、状態、規範強度、適用範囲を可視化する。</td></tr>
+              <tr><th scope="row">統合負債</th><td>正本、理由、例外、証拠を読者が頭の中で結び直す。</td><td>関連情報を同じレコードか明示的なID参照で接続する。</td></tr>
+              <tr><th scope="row">更新負債</th><td>同じ決定の言い換えが残り、改訂後に内容が競合する。</td><td>正本本文は一度だけ書き、他の箇所では参照する。</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section section--wide" id="options">
+        <header class="section__header">
+          <p class="section__label">03 / Options</p>
+          <h2>比較した選択肢</h2>
+          <p class="section__lede">読み手の分離、成果物の分割、単一HTMLへの統合を比較した。</p>
+        </header>
+        <div class="table-wrap">
+          <table>
+            <caption>選択肢と判断</caption>
+            <thead>
+              <tr><th scope="col">選択肢</th><th scope="col">利点</th><th scope="col">問題</th><th scope="col">判断</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">人間用文書とAI用要約を分ける</th><td>各読者向けに表現を最適化できる。</td><td>正本が二つになり、更新後の一致を保証できない。</td><td>不採用</td></tr>
+              <tr><th scope="row">章ごとにファイルを分ける</th><td>一ファイルの長さを抑えられる。</td><td>条件や例外の探索と統合を読者へ移す。</td><td>長さだけを理由には採用しない</td></tr>
+              <tr><th scope="row">自己完結HTMLへ統合する</th><td>正本、表示、索引、理由を一つに保てる。</td><td>情報設計と改訂規律が必要になる。</td><td>採用</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="section section--wide" id="model">
+        <header class="section__header">
+          <p class="section__label">04 / Map</p>
+          <h2>一つの正本へ至る文書モデル</h2>
+          <p class="section__lede">人間とAIは別の派生資料ではなく、同じ可視HTMLから正本レコードを参照する。</p>
+        </header>
+        <figure class="diagram">
+          <svg viewBox="0 0 940 300" role="img" aria-labelledby="map-title map-description">
+            <title id="map-title">人間とAIが一つの自己完結HTMLを参照する構造</title>
+            <desc id="map-description">左側の人間と右側のAIが、中央の自己完結HTMLへ接続し、その内部に文書契約、正本レコード、理由と例外、索引と図表が含まれる。</desc>
+            <path class="edge" d="M205 150 H310"></path>
+            <polygon class="arrow" points="310,150 296,142 296,158"></polygon>
+            <path class="edge" d="M735 150 H630"></path>
+            <polygon class="arrow" points="630,150 644,142 644,158"></polygon>
+            <rect class="node" x="25" y="95" width="180" height="110" rx="4"></rect>
+            <rect class="node node--focus" x="310" y="35" width="320" height="230" rx="4"></rect>
+            <rect class="node" x="735" y="95" width="180" height="110" rx="4"></rect>
+            <text x="115" y="145" text-anchor="middle">人間</text>
+            <text class="subtext" x="115" y="170" text-anchor="middle">判断・実装・運用</text>
+            <text x="470" y="78" text-anchor="middle">自己完結HTML</text>
+            <text class="subtext" x="470" y="112" text-anchor="middle">文書契約</text>
+            <text class="subtext" x="470" y="145" text-anchor="middle">正本レコードと安定ID</text>
+            <text class="subtext" x="470" y="178" text-anchor="middle">理由・例外・証拠</text>
+            <text class="subtext" x="470" y="211" text-anchor="middle">索引・表・図</text>
+            <text x="825" y="145" text-anchor="middle">AI</text>
+            <text class="subtext" x="825" y="170" text-anchor="middle">通常のファイル参照</text>
+          </svg>
+          <figcaption><a href="#DEC-001">DEC-001</a>により、両者が参照する正本と成果物を同じHTMLへ統合する。</figcaption>
+        </figure>
+      </section>
+
+      <section class="section section--wide" id="rules">
+        <header class="section__header">
+          <p class="section__label">05 / Canonical Records</p>
+          <h2>正本を維持する規則</h2>
+          <p class="section__lede">決定を実装可能な制約、要求、禁止、推奨へ分解する。</p>
+        </header>
+        <div class="record-grid">
+          <article class="record" id="CON-001">
+            <header class="record__header">
+              <span class="record__id">CON-001</span>
+              <h3 class="record__title">正本本文の一意性</h3>
+              <span class="status status--approved">承認済み</span>
+            </header>
+            <dl class="record__meta">
+              <div><dt>種別</dt><dd>制約</dd></div>
+              <div><dt>規範強度</dt><dd>必須</dd></div>
+              <div><dt>適用範囲</dt><dd>要求、決定、制約、禁止</dd></div>
+            </dl>
+            <p class="record__statement">同じ規範を概要、本文、表、図へ別の正本として複製しない。</p>
+            <details>
+              <summary>理由と確認方法</summary>
+              <p>一覧と図は正本IDを参照するビューとして扱い、正本本文を短縮した別規則を作らない。</p>
+            </details>
+          </article>
+
+          <article class="record" id="REQ-001">
+            <header class="record__header">
+              <span class="record__id">REQ-001</span>
+              <h3 class="record__title">共通可視情報</h3>
+              <span class="status status--approved">承認済み</span>
+            </header>
+            <dl class="record__meta">
+              <div><dt>種別</dt><dd>要求</dd></div>
+              <div><dt>規範強度</dt><dd>必須</dd></div>
+              <div><dt>適用範囲</dt><dd>完成HTMLの可視本文</dd></div>
+            </dl>
+            <p class="record__statement">目的、範囲、状態、規範強度、例外、次の行動を、人間に見える本文へ記録する。</p>
+            <details>
+              <summary>理由と確認方法</summary>
+              <p>CSSクラス、コメント、色、位置だけを読まなくても、文書の意味を特定できるかコールドリードで確認する。</p>
+            </details>
+          </article>
+
+          <article class="record" id="PRO-001">
+            <header class="record__header">
+              <span class="record__id">PRO-001</span>
+              <h3 class="record__title">読解時の追加依存</h3>
+              <span class="status status--prohibited">承認済み</span>
+            </header>
+            <dl class="record__meta">
+              <div><dt>種別</dt><dd>禁止</dd></div>
+              <div><dt>規範強度</dt><dd>禁止</dd></div>
+              <div><dt>適用範囲</dt><dd>完成HTMLの通常参照</dd></div>
+            </dl>
+            <p class="record__statement">文書の意味を理解するために、作成時の会話、Skill、外部CSS、JavaScriptを要求しない。</p>
+            <details>
+              <summary>理由と確認方法</summary>
+              <p>完成HTMLだけを新しい読者へ渡し、目的、確定事項、未確定事項、禁止事項、次の行動を特定できるか確認する。</p>
+            </details>
+          </article>
+
+          <article class="record" id="REC-001">
+            <header class="record__header">
+              <span class="record__id">REC-001</span>
+              <h3 class="record__title">到達経路の設計</h3>
+              <span class="status status--approved">承認済み</span>
+            </header>
+            <dl class="record__meta">
+              <div><dt>種別</dt><dd>推奨</dd></div>
+              <div><dt>規範強度</dt><dd>推奨</dd></div>
+              <div><dt>適用範囲</dt><dd>長い文書と複合文書</dd></div>
+            </dl>
+            <p class="record__statement">文書契約、索引、見出し、安定IDを使い、重要情報へ直接到達できる構造にする。</p>
+            <details>
+              <summary>理由と確認方法</summary>
+              <p>情報を削るのではなく、読者が必要な箇所を予測し、参照できるようにする。</p>
+            </details>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="verification">
+        <header class="section__header">
+          <p class="section__label">06 / Verification</p>
+          <h2>検証方法</h2>
+          <p class="section__lede">機械監査、コールドリード、実画面確認を別の検証として扱う。</p>
+        </header>
+        <ol class="steps">
+          <li>
+            <div>
+              <h3>自己完結性を機械監査する</h3>
+              <p>外部CSS、JavaScript、壊れた内部リンク、正本レコードの不足、意味構造の欠落を検査する。</p>
+              <p><strong>成功条件：</strong><code>ERROR 0</code>であり、すべての警告を判断済みである。</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>HTML単体でコールドリードする</h3>
+              <p>作成時の会話とSkillを知らない読者が、目的、範囲、正本、例外、次の行動を推測せず特定できるか確認する。</p>
+              <p><strong>成功条件：</strong>重要な判断に外部説明が不要である。</p>
+            </div>
+          </li>
+          <li>
+            <div>
+              <h3>対象画面幅で表示する</h3>
+              <p>デスクトップとモバイルで、固定レール、本文索引、表、図、長い見出し、展開要素を目視確認する。</p>
+              <p><strong>成功条件：</strong>欠け、重なり、ページ全体の横溢れがなく、意味の階層が保たれている。</p>
+            </div>
+          </li>
+        </ol>
+      </section>
+
+      <section class="section" id="consequences">
+        <header class="section__header">
+          <p class="section__label">07 / Consequences</p>
+          <h2>影響と適用限界</h2>
+          <p class="section__lede">この判断によって減る負担と、残る責任を区別する。</p>
+        </header>
+        <h3>期待する影響</h3>
+        <ul>
+          <li>人間とAIが同じ記述を根拠にできる。</li>
+          <li>規範の重複が減り、改訂対象を正本IDから追跡できる。</li>
+          <li>HTML単体を移動しても、内容と視覚的な意味が失われない。</li>
+        </ul>
+        <h3>残る責任</h3>
+        <ul>
+          <li>機械監査は意味の正しさや理解を保証しないため、人間によるコールドリードが必要である。</li>
+          <li>アクセス制御が異なる情報を一つに統合してはならない。</li>
+          <li>安定IDがあっても、正本本文を複製すれば更新負債は再発する。</li>
+        </ul>
+        <div class="callout callout--warning">
+          <p><strong>未確定事項：</strong>このADRの適用範囲には、現時点で未確定事項はない。アクセス制御との競合が生じた場合は、新しい判断記録を作成する。</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <p>承認済み · 最終確認 2026-08-03 · 正本 ADR-0001-SINGLE-HTML-SOURCE-OF-TRUTH.html</p>
+    </footer>
+  </div>
+</body>
+</html>
