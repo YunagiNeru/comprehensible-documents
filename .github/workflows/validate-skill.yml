@@ -1,0 +1,26 @@
+name: Validate Skill
+
+on:
+  pull_request:
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Validate bundled resources
+        run: python scripts/validate_skill_bundle.py .
+
+      - name: Run regression tests
+        run: python -m unittest discover -s scripts -p "test_*.py"
